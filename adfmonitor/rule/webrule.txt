@@ -1,4 +1,4 @@
-RULE start
+RULE webCheckStart
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 HELPER kr.co.adflow.web.TimeThreadHelper
@@ -13,7 +13,7 @@ DO start(threadId,threadName),
 ENDRULE
  
  
-RULE in
+RULE webCheckStop
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 HELPER kr.co.adflow.web.TimeThreadHelper
