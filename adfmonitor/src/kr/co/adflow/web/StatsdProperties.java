@@ -10,7 +10,7 @@ import java.util.Properties;
 public class StatsdProperties {
 
 	private Properties properties;
-	private static final String filePath = "C:\\DEV\\BCI\\adfmonitor\\WebContent\\WEB-INF\\properties\\statsd.properties";
+	private static final String filePath = "C:\\Users\\Administrator\\git\\monitoring\\adfmonitor\\properties\\statsd.properties";
 	
 	public StatsdProperties() {
 

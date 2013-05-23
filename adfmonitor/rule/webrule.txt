@@ -1,4 +1,4 @@
- RULE start
+RULE start
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 HELPER kr.co.adflow.web.TimeThreadHelper
