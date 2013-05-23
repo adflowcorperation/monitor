@@ -1,0 +1,30 @@
+ RULE start
+CLASS javax.servlet.http.HttpServlet
+METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+HELPER kr.co.adflow.web.TimeThreadHelper
+AT ENTRY
+BIND threadId:String = Long.toString(Thread.currentThread().getId()),
+     threadName:String = Thread.currentThread().getName(),
+     requsetURL:StringBuffer = $1.getRequestURL()
+IF true
+DO start(threadId,threadName),
+   ip(requsetURL),
+   check()
+ENDRULE
+ 
+ 
+RULE in
+CLASS javax.servlet.http.HttpServlet
+METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+HELPER kr.co.adflow.web.TimeThreadHelper
+AT EXIT
+BIND threadId:String = Long.toString(Thread.currentThread().getId()),
+     threadName:String = Thread.currentThread().getName(),
+     requsetURL:StringBuffer = $1.getRequestURL()
+IF true
+DO stop(threadId)
+ENDRULE
+ 
+ 
+ 
+ 

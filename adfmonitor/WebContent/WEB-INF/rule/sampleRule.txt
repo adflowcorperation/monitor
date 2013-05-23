@@ -1,0 +1,21 @@
+RULE elaspedTimeStart
+CLASS javax.servlet.http.HttpServlet
+METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+HELPER kr.co.adflow.ElapsedTimeHelper
+AT ENTRY
+IF true
+DO start()
+ENDRULE
+
+
+RULE elaspedTimeStop
+CLASS javax.servlet.http.HttpServlet
+METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+HELPER kr.co.adflow.ElapsedTimeHelper
+AT EXIT
+BIND requsetURL:StringBuffer = $1.getRequestURL()
+IF true
+DO stop(),
+   ruleData(requsetURL),
+   send()
+ENDRULE
