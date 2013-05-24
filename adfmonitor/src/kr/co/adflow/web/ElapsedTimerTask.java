@@ -9,32 +9,46 @@ import org.apache.log4j.Logger;
 public class ElapsedTimerTask extends TimerTask {
 
 	private static Logger logger = Logger.getLogger(ElapsedTimerTask.class);
-	Hashtable ht= new Hashtable();
-	
-	public ElapsedTimerTask (Hashtable ht){
-		this.ht=ht;
+	Hashtable ht = new Hashtable();
+	Hashtable longCount = new Hashtable();
+	int count = 0;
+
+	public ElapsedTimerTask(Hashtable ht) {
+		this.ht = ht;
 	}
-	
+
 	@Override
 	public void run() {
-		logger.debug("in run...");
-		logger.debug("현재 실행중인 쓰레드:"+Thread.currentThread());
-		Enumeration enKey = ht.keys();
+		try {
+			logger.debug("Thread running...");
+			logger.debug("현재 실행중인 쓰레드:" + Thread.currentThread());
+			Enumeration enKey = ht.keys();
+			if (!enKey.hasMoreElements()) {
+				logger.debug("Thread Stop...");
+				Thread.currentThread().interrupt();
+				if (Thread.currentThread().interrupted()) {
+					throw new InterruptedException();
+				}
 
-		if (!enKey.hasMoreElements()) {
-			logger.debug("if");
-			Thread.currentThread().stop();
-		}
-		while (enKey.hasMoreElements()) {
-			String key = (String) enKey.nextElement();
-			logger.debug("thread key:"+key);
-			long temp = (Long) ht.get(key);
-			long checkTime = System.currentTimeMillis();
-			long longThreadCheck = checkTime - temp;
-			if(longThreadCheck>3000){
-				logger.debug("longRunningThread.....!!!!!!!:"+key);
 			}
-			logger.debug("longThreadCheck:" + longThreadCheck);
+			while (enKey.hasMoreElements()) {
+				String key = (String) enKey.nextElement();
+				logger.debug("thread key:" + key);
+				long temp = (Long) ht.get(key);
+				long checkTime = System.currentTimeMillis();
+				long longThreadCheck = checkTime - temp;
+				if (longThreadCheck > 3000) {
+					logger.debug("longRunningThread!!    ThreadID:"
+							+ key);
+					longCount.put(key, Thread.currentThread());
+					logger.debug("longRunningThread!!    Count:"
+							+ longCount.size());
+				}
+				logger.debug("longThreadCheck:" + longThreadCheck);
+			}
+		} catch (InterruptedException e) {
+			logger.debug("InterruptedException!!");
+			return;
 		}
 
 	}
