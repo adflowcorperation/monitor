@@ -75,6 +75,7 @@ public class TimeThreadHelper extends DefaultMonitoringHelper {
 		long stopTime = System.currentTimeMillis();
 		result = stopTime - (Long) ht.remove(id);
 		logger.debug("elapesdTime:" + result);
+		//test
 	}
 
 	public void ip(StringBuffer bf) {
