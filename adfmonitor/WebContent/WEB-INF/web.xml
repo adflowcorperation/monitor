@@ -29,4 +29,14 @@
     <servlet-name>TestServlet1</servlet-name>
     <url-pattern>/TestServlet1</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SleepServlet</display-name>
+    <servlet-name>SleepServlet</servlet-name>
+    <servlet-class>kr.co.adflow.monitor.servlet.SleepServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SleepServlet</servlet-name>
+    <url-pattern>/SleepServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

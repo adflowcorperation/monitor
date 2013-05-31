@@ -1,4 +1,4 @@
-package kr.co.adflow.web;
+package kr.co.adflow.monitor.web;
 
 /**
  * StatsdClient.java

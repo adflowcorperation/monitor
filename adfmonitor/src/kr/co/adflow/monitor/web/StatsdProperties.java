@@ -1,4 +1,4 @@
-package kr.co.adflow.web;
+package kr.co.adflow.monitor.web;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import java.util.Properties;
 public class StatsdProperties {
 
 	private Properties properties;
-	private static final String filePath = "C:\\Users\\Administrator\\git\\monitoring\\adfmonitor\\properties\\statsd.properties";
+	private static final String filePath = "C:\\chan\\monitor\\adfmonitor\\properties\\statsd.properties";
 	
 	public StatsdProperties() {
 
@@ -28,12 +28,6 @@ public class StatsdProperties {
 		}
 	}
 
-	/**
-	 * Message
-	 * 
-	 * @param key
-	 * @return message
-	 */
 	public String read(String key) {
 		return properties.getProperty(key);
 	}
