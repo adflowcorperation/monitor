@@ -1,31 +1,28 @@
-RULE webCheckStart
+RULE start
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 HELPER  kr.co.adflow.monitor.web.WebHelper
 AT ENTRY
 BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      threadName:String = Thread.currentThread().getName(),
-     requsetURL:StringBuffer = $1.getRequestURL(),
-     off:boolean=false,
-     on:boolean=true
+     requsetURL:StringBuffer = $1.getRequestURL()
 IF true
-DO longThreadCheck(threadId,threadName),
-   elapesdTimeStrat(threadId),
+DO startTime(threadId),
    threadCountSend()
 ENDRULE
 
-RULE webCheckStop
+
+RULE stop
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 HELPER  kr.co.adflow.monitor.web.WebHelper
 AT EXIT
 BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      threadName:String = Thread.currentThread().getName(),
-     requsetURL:StringBuffer = $1.getRequestURL(),
-     off:boolean=false,
-     on:boolean=true
+     requsetURL:StringBuffer = $1.getRequestURL()
+
 IF true
-DO elapesdTimeStop(threadId),
+DO stopTime(threadId),
    elapesdTimeSend(requsetURL)
 ENDRULE
 

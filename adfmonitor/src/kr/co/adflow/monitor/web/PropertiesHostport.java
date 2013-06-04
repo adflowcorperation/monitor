@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-public class StatsdProperties {
+public class PropertiesHostport {
 
 	private Properties properties;
 	private static final String filePath = "C:\\chan\\monitor\\adfmonitor\\properties\\statsd.properties";
 	
-	public StatsdProperties() {
+	public PropertiesHostport() {
 
 		this.properties = new Properties();
 		try {

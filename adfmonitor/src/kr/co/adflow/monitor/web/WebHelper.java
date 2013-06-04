@@ -1,62 +1,49 @@
 package kr.co.adflow.monitor.web;
 
+import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Timer;
 
 import org.apache.log4j.Logger;
 import org.jboss.byteman.rule.Rule;
+import org.jboss.byteman.rule.helper.Helper;
 
-public class WebHelper extends DefaultMonitoringHelper {
+public class WebHelper extends Helper {
 
 	private static Logger logger = Logger.getLogger(WebHelper.class);
-	private static String Thread_ID = "Thread_ID:";
-	private static String Thread_NAME = "Thread_NAME:";
-	private static String ThreadCount = "ThreadCount";
-	private static String HelperStart = "start()";
-	private static String HelperStop = "stop()";
-	private static String ElapesdTime = "ElapesdTime:";
+	private LongThreadTable instance = LongThreadTable.getInstantce();
+	private static Hashtable hash = new Hashtable();
+	private static HashSet set = new HashSet();
 	private static long elapesdTime = 0;
 	private static int threadCount = 0;
-	private static int startCount = 0;
-	private static int stopCount = 0;
-	private Timer timer;
-	private static Hashtable elapesdTimeHt = new Hashtable();
+	private static StatsdClient client = StatsdClient.getChanInstance();
 
 	protected WebHelper(Rule rule) {
 		super(rule);
 		// TODO Auto-generated constructor stub
 	}
 
-	public void longThreadCheck(String threadId, String threadName) {
-		startCount++;
-		if (startCount > 1) {
-			long startTime = System.currentTimeMillis();
-			logger.debug(Thread_ID + threadId);
-			logger.debug(Thread_NAME + threadName);
-			Hashtable ht = new Hashtable();
-			ht.put(threadId, startTime);
-			timer = new Timer();
-			LongThreadTask myTask = new LongThreadTask(timer, ht, client);
-			timer.schedule(myTask, 0, 1000);
-		} else {
-			logger.debug(HelperStart);
-		}
-	}
-
-	public void elapesdTimeStrat(String threadId) {
+	public void startTime(String threadId) {
 		long startTime = System.currentTimeMillis();
-		elapesdTimeHt.put(threadId, startTime);
-		threadCount = elapesdTimeHt.size();
+		logger.debug("startTime:" + startTime);
+		hash = instance.getThreadHt();
+		set = instance.getSet();
+		hash.put(threadId, startTime);
+		threadCount = hash.size();
+
 	}
 
-	public void elapesdTimeStop(String threadId) {
+	public void stopTime(String threadID) {
 		long stopTime = System.currentTimeMillis();
-		elapesdTime = stopTime - (Long) elapesdTimeHt.remove(threadId);
-		logger.debug(ElapesdTime + elapesdTime);
+		hash = instance.getThreadHt();
+		set = instance.getSet();
+		elapesdTime = stopTime - (Long) hash.remove(threadID);
+		set.remove(threadID);
+		logger.debug("elapesdTime:" + elapesdTime);
 
 	}
 
 	public void elapesdTimeSend(StringBuffer bf) {
+		logger.debug("!!!!!!!!requrl:" + bf.toString());
 		bf.delete(0, 7);
 		String key = bf.toString();
 		key = key.replace(".", "-");
@@ -65,16 +52,13 @@ public class WebHelper extends DefaultMonitoringHelper {
 		logger.debug("key:" + key);
 		bf.delete(0, bf.toString().length());
 		if (!key.contains("localhost")) {
-			client.timing(key, (int) elapesdTime, 1.0);
+			client.timing(key, (int) elapesdTime);
 		}
 	}
 
 	public void threadCountSend() {
-		logger.debug(ThreadCount+":"+threadCount);
-		client.timing(ThreadCount, threadCount);
+		logger.debug("ThreadCountTest:" + threadCount);
+		client.timing("ThreadCountTest", threadCount);
 	}
-	
-	
-
 
 }

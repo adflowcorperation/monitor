@@ -9,26 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>TestServlet</display-name>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>kr.co.adflow.web.TestServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/TestServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>TestServlet1</display-name>
-    <servlet-name>TestServlet1</servlet-name>
-    <servlet-class>kr.co.adflow.web.TestServlet1</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TestServlet1</servlet-name>
-    <url-pattern>/TestServlet1</url-pattern>
-  </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>SleepServlet</display-name>
@@ -39,4 +20,6 @@
     <servlet-name>SleepServlet</servlet-name>
     <url-pattern>/SleepServlet</url-pattern>
   </servlet-mapping>
+  <listener><listener-class>kr.co.adflow.monitor.web.LongThreadCheck</listener-class></listener>
+
 </web-app>
