@@ -32,7 +32,7 @@ public class StatsdClient {
 		return StatsdClinetInstance;
 	}
 
-	public void init() {
+	private void init() {
 
 		properties = new PropertiesHostport();
 		host = properties.read("host");
