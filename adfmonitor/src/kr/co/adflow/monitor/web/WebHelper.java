@@ -43,7 +43,7 @@ public class WebHelper extends Helper {
 	}
 
 	public void elapesdTimeSend(StringBuffer bf) {
-		logger.debug("!!!!!!!!requrl:" + bf.toString());
+		logger.debug("testbulid:" + bf.toString());
 		bf.delete(0, 7);
 		String key = bf.toString();
 		key = key.replace(".", "-");
@@ -59,6 +59,7 @@ public class WebHelper extends Helper {
 	public void threadCountSend() {
 		logger.debug("ThreadCountTest:" + threadCount);
 		client.timing("ThreadCountTest", threadCount);
+	
 	}
 
 }

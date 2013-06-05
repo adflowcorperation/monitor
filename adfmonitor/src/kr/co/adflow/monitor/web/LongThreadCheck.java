@@ -41,6 +41,8 @@ public class LongThreadCheck extends TimerTask implements
 
 		run();
 		timer.scheduleAtFixedRate(this, 0, 1000);
+		
+		
 	}
 
 	@Override
