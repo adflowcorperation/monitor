@@ -1,23 +1,23 @@
 package kr.co.adflow.monitor.web;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesHostport {
 
 	private Properties properties;
-	private static final String filePath = "C:\\Users\\Administrator\\git\\monitor\\adfmonitor\\properties\\statsd.properties";
 	
+
 	public PropertiesHostport() {
 
 		this.properties = new Properties();
 		try {
-			this.properties.load(new BufferedReader(new InputStreamReader(
-					new FileInputStream(filePath))));
+			InputStream is = PropertiesHostport.class
+					.getResourceAsStream("/properties/statsd.properties");
+
+			properties.load(is);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -31,6 +31,5 @@ public class PropertiesHostport {
 	public String read(String key) {
 		return properties.getProperty(key);
 	}
-
 
 }
