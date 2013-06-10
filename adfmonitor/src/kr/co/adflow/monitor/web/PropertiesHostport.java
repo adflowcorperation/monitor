@@ -10,7 +10,7 @@ import java.util.Properties;
 public class PropertiesHostport {
 
 	private Properties properties;
-	private static final String filePath = "C:\\chan\\monitor\\adfmonitor\\properties\\statsd.properties";
+	private static final String filePath = "C:\\Users\\Administrator\\git\\monitor\\adfmonitor\\properties\\statsd.properties";
 	
 	public PropertiesHostport() {
 

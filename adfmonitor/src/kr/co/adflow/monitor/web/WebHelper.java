@@ -3,19 +3,20 @@ package kr.co.adflow.monitor.web;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import kr.co.adflow.monitor.util.ReqUrlUtil;
+
 import org.apache.log4j.Logger;
 import org.jboss.byteman.rule.Rule;
 import org.jboss.byteman.rule.helper.Helper;
 
+import com.sun.jndi.toolkit.url.UrlUtil;
+
 public class WebHelper extends Helper {
 
 	private static Logger logger = Logger.getLogger(WebHelper.class);
-	private LongThreadTable instance = LongThreadTable.getInstantce();
-	private static Hashtable hash = new Hashtable();
-	private static HashSet set = new HashSet();
-	private static long elapesdTime = 0;
-	private static int threadCount = 0;
+	private LongThreadCheck instance = LongThreadCheck.getInstantce();
 	private static StatsdClient client = StatsdClient.getChanInstance();
+	private static ReqUrlUtil reqUrlUtil = ReqUrlUtil.urlUtilgetInstance();
 
 	protected WebHelper(Rule rule) {
 		super(rule);
@@ -25,41 +26,25 @@ public class WebHelper extends Helper {
 	public void startTime(String threadId) {
 		long startTime = System.currentTimeMillis();
 		logger.debug("startTime:" + startTime);
-		hash = instance.getThreadHt();
-		set = instance.getSet();
+		Hashtable hash = instance.getThreadHt();
+		HashSet set = instance.getSet();
 		hash.put(threadId, startTime);
-		threadCount = hash.size();
-
+		int threadCount = hash.size();
+		logger.debug("threadCont:" + threadCount);
+		client.timing("threadCount", threadCount);
 	}
 
-	public void stopTime(String threadID) {
+	public void stopTime(String threadID, StringBuffer bf) {
 		long stopTime = System.currentTimeMillis();
-		hash = instance.getThreadHt();
-		set = instance.getSet();
-		elapesdTime = stopTime - (Long) hash.remove(threadID);
+		Hashtable hash = instance.getThreadHt();
+		HashSet set = instance.getSet();
+		long elapesdTime = stopTime - (Long) hash.remove(threadID);
 		set.remove(threadID);
 		logger.debug("elapesdTime:" + elapesdTime);
-
-	}
-
-	public void elapesdTimeSend(StringBuffer bf) {
-		logger.debug("testbulid:" + bf.toString());
-		bf.delete(0, 7);
-		String key = bf.toString();
-		key = key.replace(".", "-");
-		key = key.replace("/", ".");
-		key = key.replace(":", "-");
-		logger.debug("key:" + key);
-		bf.delete(0, bf.toString().length());
+		String key = reqUrlUtil.sendStatsdUrl(bf);
 		if (!key.contains("localhost")) {
 			client.timing(key, (int) elapesdTime);
 		}
-	}
 
-	public void threadCountSend() {
-		logger.debug("ThreadCountTest:" + threadCount);
-		client.timing("ThreadCountTest", threadCount);
-	
 	}
-
 }

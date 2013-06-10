@@ -7,8 +7,7 @@ BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      threadName:String = Thread.currentThread().getName(),
      requsetURL:StringBuffer = $1.getRequestURL()
 IF true
-DO startTime(threadId),
-   threadCountSend()
+DO startTime(threadId)
 ENDRULE
 
 
@@ -22,7 +21,6 @@ BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      requsetURL:StringBuffer = $1.getRequestURL()
 
 IF true
-DO stopTime(threadId),
-   elapesdTimeSend(requsetURL)
+DO stopTime(threadId,requsetURL)
 ENDRULE
 

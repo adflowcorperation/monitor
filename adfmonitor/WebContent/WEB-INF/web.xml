@@ -20,6 +20,4 @@
     <servlet-name>SleepServlet</servlet-name>
     <url-pattern>/SleepServlet</url-pattern>
   </servlet-mapping>
-  <listener><listener-class>kr.co.adflow.monitor.web.LongThreadCheck</listener-class></listener>
-
 </web-app>
