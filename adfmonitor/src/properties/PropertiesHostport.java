@@ -1,4 +1,4 @@
-package kr.co.adflow.monitor.web;
+package properties;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

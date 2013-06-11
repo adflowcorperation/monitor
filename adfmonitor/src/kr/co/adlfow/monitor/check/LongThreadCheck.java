@@ -1,8 +1,10 @@
-package kr.co.adflow.monitor.web;
+package kr.co.adlfow.monitor.check;
 
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+
+import kr.co.adflow.monitor.statsd.StatsdClient;
 
 import org.apache.log4j.Logger;
 
@@ -33,11 +35,7 @@ public class LongThreadCheck extends Thread {
 		return set;
 	}
 
-	
-	
-	
-	
-	//ThreadCheck
+	// ThreadCheck
 	@Override
 	public void run() {
 		while (true) {

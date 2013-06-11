@@ -1,4 +1,4 @@
-package kr.co.adflow.monitor.web;
+package kr.co.adflow.monitor.statsd;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +9,10 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Locale;
 
+
 import org.apache.log4j.Logger;
+
+import properties.PropertiesHostport;
 
 public class StatsdClient {
 
