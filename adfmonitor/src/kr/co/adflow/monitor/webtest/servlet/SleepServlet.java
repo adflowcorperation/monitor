@@ -1,4 +1,4 @@
-package kr.co.adflow.monitor.servlet;
+package kr.co.adflow.monitor.webtest.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
