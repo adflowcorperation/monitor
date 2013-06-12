@@ -1,85 +1,51 @@
 package kr.co.adflow.monitor.system;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.eclipse.jdt.internal.compiler.ast.ThrowStatement;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 
-public class SystemInfo {
-	Sigar sigar = new Sigar();
+public class SystemInfo extends Thread {
+
+	private static Sigar sigar = new Sigar();
+	private static StatsdClient sc = StatsdClient.getChanInstance();
+	private static OperatingSystemMXBean osbean = (OperatingSystemMXBean) ManagementFactory
+			.getOperatingSystemMXBean();
 
 	/**
 	 * @param args
-	 * @throws SigarException
+	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception {
-		final SystemInfo si2 = new SystemInfo();
-		Timer timer = new Timer();
-		final StatsdClient sc = new StatsdClient("192.168.0.135", 8125);
-		final OperatingSystemMXBean osbean = (OperatingSystemMXBean) ManagementFactory
-				.getOperatingSystemMXBean();
-		TimerTask task = new TimerTask() {
+	public void test() throws Exception {
 
-			@Override
-			public void run() {
-				try {
-					double cpu = si2.getCpuInfo();
-					long lmem = si2.getLocalMemInfo();
-					long hmem=si2.getHeapMemInfo();
-					long nhmem=si2.getNonHeapMemInfo();
-					sc.gauge("kr.co.adflow.cpu." + osbean.getName(), cpu, 1.0);
-					sc.gauge("kr.co.adflow.mem.local." + osbean.getName(), lmem, 1.0);
-					sc.gauge("kr.co.adflow.mem.heap." + osbean.getName(), hmem, 1.0);
-					sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(), nhmem, 1.0);
-					File[] roots = File.listRoots();
-					float using = 0;
-					float total = 0;
-					float percentage = 0;
-					NumberFormat nf = NumberFormat.getInstance();
-					nf.setMaximumFractionDigits(0);
-					System.out.println(roots.length);
-					for (int i = 0; i < roots.length; i++) {
-						if (roots[i].getTotalSpace() > 0) {
-							System.out.println(roots[i]);
-							System.out.println("총 용량 = "
-									+ roots[i].getTotalSpace());
-							System.out.println("남은 공간 = "
-									+ roots[i].getFreeSpace());
-							System.out.println("사용 공간 = "
-									+ (roots[i].getTotalSpace() - roots[i]
-											.getFreeSpace()));
-							total = roots[i].getTotalSpace();
-							using = roots[i].getTotalSpace()
-									- roots[i].getFreeSpace();
-
-							System.out.println("percentage : "
-									+ nf.format((using / total) * 100) + "%");
-							percentage = (using / total) * 100;
-							sc.gauge("kr.co.adflow.hdd." + osbean.getName()
-									+ "." + roots[i], percentage, 1.0);
-						}
-					}
-				} catch (SigarException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		};
-		timer.scheduleAtFixedRate(task, 0, 1000);
+		while (true) {
+			sleep(3000);
+			System.out.println("********CPU**********");
+			getCpuInfo();
+			System.out.println("********HDD**********");
+			getHDDInfo();
+			System.out.println("********HMem**********");
+			getHeapMemInfo();
+			System.out.println("********LMem**********");
+			getLocalMemInfo();
+			System.out.println("********NHMem**********");
+			getNonHeapMemInfo();
+			getNonHeapMemInfo2();
+		}
 	}
 
-	public double getCpuInfo() throws SigarException {
+	public void getCpuInfo() throws SigarException {
+
+		System.out.println("CPUINFO");
 		CpuPerc cpu = sigar.getCpuPerc();
 		System.out.println("User Time....." + CpuPerc.format(cpu.getUser()));
 		System.out.println("Sys Time......" + CpuPerc.format(cpu.getSys()));
@@ -88,18 +54,13 @@ public class SystemInfo {
 		System.out.println(("Nice Time....." + CpuPerc.format(cpu.getNice())));
 		System.out
 				.println("Combined......" + CpuPerc.format(cpu.getCombined()));
-		System.out.println("Irq Time......" + CpuPerc.format(cpu.getIrq()));
-		// if (SigarLoader.IS_LINUX) {
-		// System.out.println("SoftIrq Time.."
-		// + CpuPerc.format(cpu.getSoftIrq()));
-		// System.out.println("Stolen Time...."
-		// + CpuPerc.format(cpu.getStolen()));
-		// }
-		System.out.println("");
-		return cpu.getCombined() * 100;
+		System.out.println("Irq Time......" + CpuPerc.format(cpu.getIdle()));
+
+		sc.gauge("kr.co.adflow.cpu." + osbean.getName(),
+				cpu.getCombined() * 100);
 	}
 
-	public long getLocalMemInfo() throws SigarException {
+	public void getLocalMemInfo() throws SigarException {
 
 		Mem mem;
 
@@ -107,20 +68,86 @@ public class SystemInfo {
 		System.out.println("Total =" + (mem.getTotal() / 1024) / 1024 + "M av");
 		System.out.println("Used =" + (mem.getUsed() / 1024) / 1024 + "M used");
 		System.out.println("Free =" + (mem.getFree() / 1024) / 1024 + "M free");
-		return (mem.getUsed() / 1024) / 1024;
+		sc.gauge("kr.co.adflow.mem.local." + osbean.getName(),
+				(mem.getUsed() / 1024) / 1024);
 
 	}
 
-	public long getHeapMemInfo() {
-		MemoryMXBean memorymbean = ManagementFactory.getMemoryMXBean();
-		System.out.println("Heap Memory Usage: "
-				+ memorymbean.getHeapMemoryUsage().getUsed());
-		return memorymbean.getHeapMemoryUsage().getUsed();
+	public void getNonHeapMemInfo() throws Exception {
+
+		long heap = getHeapMemInfo();
+		long pid = sigar.getPid();
+		System.out.println(pid);
+
+		System.out.println("Name = " + sigar.getProcState(pid).getName()
+				+ ", pid = " + pid + ", ResidentMem = "
+				+ sigar.getProcMem(pid).getResident());
+		System.out.println(sigar.getProcMem(pid).getResident() - heap);
+		// sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(), sigar
+		// .getProcMem(pid).getResident());
+
 	}
-	public long getNonHeapMemInfo() {
-		MemoryMXBean memorymbean = ManagementFactory.getMemoryMXBean();
-		System.out.println("Heap Memory Usage: "
-				+ memorymbean.getHeapMemoryUsage().getUsed());
+
+	public long getHeapMemInfo() throws Exception {
+		MemoryMXBean memorymbean = null;
+		try {
+			memorymbean = ManagementFactory.getMemoryMXBean();
+			System.out.println("Heap Memory Usage: "
+					+ memorymbean.getHeapMemoryUsage().getUsed());
+			sc.gauge("kr.co.adflow.mem.heap." + osbean.getName(), memorymbean
+					.getHeapMemoryUsage().getUsed());
+		} catch (Exception e) {
+			throw e;
+		}
 		return memorymbean.getHeapMemoryUsage().getUsed();
+
+	}
+
+	public void getNonHeapMemInfo2() throws Exception {
+
+		MemoryMXBean memorymbean = null;
+		try {
+			memorymbean = ManagementFactory.getMemoryMXBean();
+			System.out.println("Non-Heap Memory Usage: "
+					+ memorymbean.getNonHeapMemoryUsage().getUsed());
+			sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(), memorymbean
+					.getNonHeapMemoryUsage().getUsed());
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
+	public void getHDDInfo() throws Exception {
+		NumberFormat nf = null;
+		try {
+			File[] roots = File.listRoots();
+			float using = 0;
+			float total = 0;
+			float percentage = 0;
+			nf = NumberFormat.getInstance();
+			nf.setMaximumFractionDigits(0);
+			System.out.println(roots.length);
+			for (int i = 0; i < roots.length; i++) {
+				if (roots[i].getTotalSpace() > 0) {
+					System.out.println(roots[i]);
+					System.out.println("Total = " + roots[i].getTotalSpace());
+					System.out.println("Free = " + roots[i].getFreeSpace());
+					System.out.println("Used = "
+							+ (roots[i].getTotalSpace() - roots[i]
+									.getFreeSpace()));
+					total = roots[i].getTotalSpace();
+					using = roots[i].getTotalSpace() - roots[i].getFreeSpace();
+
+					System.out.println("percentage : "
+							+ nf.format((using / total) * 100) + "%");
+					percentage = (using / total) * 100;
+					sc.gauge("kr.co.adflow.hdd." + osbean.getName() + "."
+							+ roots[i], percentage);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }
