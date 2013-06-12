@@ -29,7 +29,7 @@ public class OpenConnections extends Thread {
 	public void run() {
 		while (true) {
 			
-
+			
 			// get openedConnections
 			OpenConnections openedConnections = OpenConnections.getInstance();
 			//

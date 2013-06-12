@@ -39,6 +39,7 @@ public class LongThreadCheck extends Thread {
 	@Override
 	public void run() {
 		while (true) {
+			
 			long checkTime = System.currentTimeMillis();
 			String key = "";
 			long threadRunningTime = 0;
@@ -49,7 +50,7 @@ public class LongThreadCheck extends Thread {
 				long startTime = (Long) ht.get(key);
 				threadRunningTime = checkTime - startTime;
 				logger.debug("threadRunningTime:" + threadRunningTime);
-				if (threadRunningTime > 3000) {
+				if (threadRunningTime > 2500) {
 					logger.debug("threadId:" + key);
 					set = this.getSet();
 					set.add(key);

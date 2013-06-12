@@ -24,11 +24,7 @@ IF true
 DO stopTime(threadId,requsetURL)
 ENDRULE
 
-RULE Datasource close rule
-CLASS ^java.sql.DriverManager
-METHOD releaseConnection
-HELPER kr.co.adflow.monitor.helper.WebHelper
-AT ENTRY
-IF TRUE
- DO  traceln("RULE Datasource close rule...................")
-ENDRULE
+
+
+
+

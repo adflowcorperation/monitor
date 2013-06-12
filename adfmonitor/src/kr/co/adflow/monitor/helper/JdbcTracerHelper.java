@@ -112,9 +112,7 @@ public class JdbcTracerHelper extends Helper {
 
 	public void releaseConnection(Connection connection) {
 		logger.info("releaseConnection..................");
-		OpenConnections openedConnections = OpenConnections.getInstance();
-		Hashtable ht = openedConnections.getCpendConnht();
-		ht.remove(Thread.currentThread().getId());
+		
 
 	}
 
