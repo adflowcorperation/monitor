@@ -20,4 +20,14 @@
     <servlet-name>SleepServlet</servlet-name>
     <url-pattern>/SleepServlet</url-pattern>
   </servlet-mapping>
+    <servlet>
+    <description></description>
+    <display-name>SysInfoTest</display-name>
+    <servlet-name>SysInfoTest</servlet-name>
+    <servlet-class>kr.co.adflow.monitor.system.SysInfoTest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SysInfoTest</servlet-name>
+    <url-pattern>/SysInfoTest</url-pattern>
+  </servlet-mapping>
 </web-app>

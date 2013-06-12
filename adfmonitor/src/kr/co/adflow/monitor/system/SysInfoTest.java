@@ -1,6 +1,7 @@
 package kr.co.adflow.monitor.system;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,10 +37,10 @@ public class SysInfoTest extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		SystemInfo s = new SystemInfo();
+
+		SystemInfo info = SystemInfo.getSysteminfoInstance();
 		try {
-			s.test();
+			info.test();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

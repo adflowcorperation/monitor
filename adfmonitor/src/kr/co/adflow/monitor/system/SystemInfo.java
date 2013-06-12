@@ -5,10 +5,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.text.NumberFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import org.eclipse.jdt.internal.compiler.ast.ThrowStatement;
+import kr.co.adflow.monitor.statsd.StatsdClient;
+
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
@@ -25,6 +24,17 @@ public class SystemInfo extends Thread {
 	 * @param args
 	 * @throws Exception
 	 */
+
+	private static SystemInfo systemInfo = new SystemInfo();
+
+	private SystemInfo() {
+
+	}
+
+	public static SystemInfo getSysteminfoInstance() {
+		return systemInfo;
+	}
+
 	public void test() throws Exception {
 
 		while (true) {
@@ -110,8 +120,8 @@ public class SystemInfo extends Thread {
 			memorymbean = ManagementFactory.getMemoryMXBean();
 			System.out.println("Non-Heap Memory Usage: "
 					+ memorymbean.getNonHeapMemoryUsage().getUsed());
-			sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(), memorymbean
-					.getNonHeapMemoryUsage().getUsed());
+			sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(),
+					memorymbean.getNonHeapMemoryUsage().getUsed());
 		} catch (Exception e) {
 			throw e;
 		}

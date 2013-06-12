@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 
 import kr.co.adflow.monitor.statsd.StatsdClient;
+import kr.co.adflow.monitor.system.ThreadStackTrace;
 
 import org.apache.log4j.Logger;
 
@@ -15,7 +16,7 @@ public class LongThreadCheck extends Thread {
 	private static Hashtable threadHt = new Hashtable();
 	private static HashSet set = new HashSet();
 	private static StatsdClient client = StatsdClient.getChanInstance();
-
+	private ThreadStackTrace stackTrace= new ThreadStackTrace();
 	// Singleton
 	private LongThreadCheck() {
 		this.start();
@@ -55,6 +56,7 @@ public class LongThreadCheck extends Thread {
 					set = this.getSet();
 					set.add(key);
 					client.timing("longThreadCont", set.size());
+					stackTrace.getStackTrace(key);
 					logger.debug("longRunningThreadCount:" + set.size());
 
 				}

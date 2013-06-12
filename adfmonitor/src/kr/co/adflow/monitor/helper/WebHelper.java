@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 
 import kr.co.adflow.monitor.statsd.StatsdClient;
+import kr.co.adflow.monitor.system.SystemInfo;
 import kr.co.adflow.monitor.util.ReqUrlUtil;
 import kr.co.adlfow.monitor.check.LongThreadCheck;
 
@@ -19,6 +20,7 @@ public class WebHelper extends Helper {
 	private LongThreadCheck instance = LongThreadCheck.getInstantce();
 	private static StatsdClient client = StatsdClient.getChanInstance();
 	private static ReqUrlUtil reqUrlUtil = ReqUrlUtil.urlUtilgetInstance();
+//	private SystemInfo systemInfo = SystemInfo.getSysteminfoInstance();
 
 	protected WebHelper(Rule rule) {
 		super(rule);
