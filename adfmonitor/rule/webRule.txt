@@ -1,7 +1,8 @@
+###########################################service############################################################
 RULE start
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-HELPER  kr.co.adflow.monitor.web.WebHelper
+HELPER  kr.co.adflow.monitor.helper.WebHelper
 AT ENTRY
 BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      threadName:String = Thread.currentThread().getName(),
@@ -9,12 +10,11 @@ BIND threadId:String = Long.toString(Thread.currentThread().getId()),
 IF true
 DO startTime(threadId)
 ENDRULE
-
-
+#######################################################################################################
 RULE stop
 CLASS javax.servlet.http.HttpServlet
 METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-HELPER  kr.co.adflow.monitor.web.WebHelper
+HELPER  kr.co.adflow.monitor.helper.WebHelper
 AT EXIT
 BIND threadId:String = Long.toString(Thread.currentThread().getId()),
      threadName:String = Thread.currentThread().getName(),
@@ -24,3 +24,11 @@ IF true
 DO stopTime(threadId,requsetURL)
 ENDRULE
 
+RULE Datasource close rule
+CLASS ^java.sql.DriverManager
+METHOD releaseConnection
+HELPER kr.co.adflow.monitor.helper.WebHelper
+AT ENTRY
+IF TRUE
+ DO  traceln("RULE Datasource close rule...................")
+ENDRULE

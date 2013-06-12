@@ -26,27 +26,36 @@ public class WebHelper extends Helper {
 	}
 
 	public void startTime(String threadId) {
-		long startTime = System.currentTimeMillis();
-		logger.debug("startTime:" + startTime);
-		Hashtable hash = instance.getThreadHt();
-		HashSet set = instance.getSet();
-		hash.put(threadId, startTime);
-		int threadCount = hash.size();
-		logger.debug("threadCont:" + threadCount);
-		client.timing("threadCount", threadCount);
+		Hashtable hash = null;
+		try {
+			long startTime = System.currentTimeMillis();
+			logger.debug("startTime:" + startTime);
+			hash = instance.getThreadHt();
+			HashSet set = instance.getSet();
+			hash.put(threadId, startTime);
+			int threadCount = hash.size();
+			logger.debug("threadCont:" + threadCount);
+			client.timing("threadCount", threadCount);
+		} catch (Exception e) {
+			e.printStackTrace();
+			hash.remove(threadId);
+		}
 	}
 
 	public void stopTime(String threadID, StringBuffer bf) {
-		long stopTime = System.currentTimeMillis();
-		Hashtable hash = instance.getThreadHt();
-		HashSet set = instance.getSet();
-		long elapesdTime = stopTime - (Long) hash.remove(threadID);
-		set.remove(threadID);
-		logger.debug("elapesdTime:" + elapesdTime);
-		String key = reqUrlUtil.sendStatsdUrl(bf);
-		if (!key.contains("localhost")) {
-			client.timing(key, (int) elapesdTime);
+		try {
+			long stopTime = System.currentTimeMillis();
+			Hashtable hash = instance.getThreadHt();
+			HashSet set = instance.getSet();
+			long elapesdTime = stopTime - (Long) hash.remove(threadID);
+			set.remove(threadID);
+			logger.debug("elapesdTime:" + elapesdTime);
+			String key = reqUrlUtil.sendStatsdUrl(bf);
+			if (!key.contains("localhost")) {
+				client.timing(key, (int) elapesdTime);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 	}
 }

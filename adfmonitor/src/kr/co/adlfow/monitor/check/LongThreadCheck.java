@@ -50,11 +50,11 @@ public class LongThreadCheck extends Thread {
 				threadRunningTime = checkTime - startTime;
 				logger.debug("threadRunningTime:" + threadRunningTime);
 				if (threadRunningTime > 3000) {
-					logger.debug("key:" + key);
+					logger.debug("threadId:" + key);
 					set = this.getSet();
 					set.add(key);
 					client.timing("longThreadCont", set.size());
-					logger.debug("setSize:" + set.size());
+					logger.debug("longRunningThreadCount:" + set.size());
 
 				}
 

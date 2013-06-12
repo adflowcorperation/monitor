@@ -1,12 +1,10 @@
 package kr.co.adflow.monitor.jdbctest.servlet;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +32,7 @@ public class JoinusService {
 
 			int count = pstmt.executeUpdate();
 
-			
+		
 
 			if (count > 0) {
 				flag = true;
