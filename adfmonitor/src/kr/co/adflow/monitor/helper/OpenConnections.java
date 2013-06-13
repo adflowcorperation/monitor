@@ -3,11 +3,13 @@ package kr.co.adflow.monitor.helper;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 public class OpenConnections extends Thread {
 
 	private static OpenConnections openConnections = new OpenConnections();
 	private static Hashtable cpendConnht = new Hashtable();
-
+	private static Logger logger = Logger.getLogger(OpenConnections.class);
 	private OpenConnections() {
 		this.start();
 	}
@@ -34,24 +36,21 @@ public class OpenConnections extends Thread {
 			OpenConnections openedConnections = OpenConnections.getInstance();
 			//
 			Hashtable ht = openedConnections.getCpendConnht();
-			System.out.println("ht.size() : "+ht.size());
-			// 시간체크로직구현
+		
 			long currentTime = System.currentTimeMillis();
 			
 			for (Enumeration e = ht.keys(); e.hasMoreElements();) {
 				long threadID = (Long) e.nextElement();
-				System.out.println("threadID : " + threadID);
+				logger.debug("ConnectionthreadID : " + threadID);
 				long startTime = (Long) ht.get(threadID);
 				long elapsedTime = currentTime - startTime;
-				System.out.println("elapsedTime : " + elapsedTime);
-				// 걸린시간의 따라서 분기
+				logger.debug("ConnectionrelaseTime : " + elapsedTime);
+		
 				if (elapsedTime < 1000 ) {
-					// 정상
-					// pass
+				
 				} else {
-					System.out.println(" connectionLeak ");
-					// connectionLeak 일결우
-					// statd 로 전송
+					logger.debug(" connectionLeak ");
+				
 				}
 
 			}

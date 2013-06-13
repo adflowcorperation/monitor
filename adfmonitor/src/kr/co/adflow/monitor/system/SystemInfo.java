@@ -80,7 +80,7 @@ public class SystemInfo extends Thread {
 		System.out.println("Free =" + (mem.getFree() / 1024) / 1024 + "M free");
 		sc.gauge("kr.co.adflow.mem.local." + osbean.getName(),
 				(mem.getUsed() / 1024) / 1024);
-
+		
 	}
 
 	public void getNonHeapMemInfo() throws Exception {

@@ -1,0 +1,12 @@
+RULE ServerSocket Read InputStream
+CLASS ^java.net.Socket
+METHOD getInputStream
+HELPER  kr.co.adflow.monitor.helper.SocketHelper
+AT EXIT
+IF TRUE
+DO traceln("inputStrem getINputStream............................"),
+   inputStream($!)
+ENDRULE
+
+
+

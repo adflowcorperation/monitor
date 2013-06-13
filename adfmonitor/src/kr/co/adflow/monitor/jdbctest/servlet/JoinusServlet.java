@@ -1,16 +1,12 @@
 package kr.co.adflow.monitor.jdbctest.servlet;
 
 import java.io.IOException;
-import java.sql.ParameterMetaData;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import kr.co.adflow.byteman.JdbcTracerHelper;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +43,7 @@ public class JoinusServlet extends HttpServlet {
 		logger.info(flag);
 		request.setAttribute("memberBean", memberBean);
 		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/hellobyteman/login/JoinusResult.jsp");
+				.getRequestDispatcher("/adfmonitor/login/JoinusResult.jsp");
 //		RequestDispatcher dispatcher = request
 //		.getRequestDispatcher("login/retryid.jsp");
 		dispatcher.forward(request, response);

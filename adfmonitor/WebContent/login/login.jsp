@@ -8,7 +8,7 @@
 	<script>		
 		function signup()
 		{
-			document.location="/hellobyteman/login/joinus.jsp";
+			document.location="/adfmonitor/login/joinus.jsp";
 		}
 
 		function inputValidate()
@@ -32,7 +32,7 @@
 		</script>
 </head>
 <body>
-<form name="loginform" action="/hellobyteman/login/bbslogin" method="post">
+<form name="loginform" action="/adfmonitor/login/bbslogin" method="post">
 <div class="formcontent">
 <br> User ID: <input type="text" name="userId" />
 <br> Password: <input type="password" name="password" />
@@ -44,7 +44,7 @@
 </div>
 <div>
 <input type="button" value="signup" onclick="javascript:signup()" />
-<input type="button" value="continue without login" onclick="window.location.href='/hellobyteman/bbslist'" />
+<input type="button" value="continue without login" onclick="window.location.href='/adfmonitor/bbslist'" />
 </div>
 </form>
 </body>

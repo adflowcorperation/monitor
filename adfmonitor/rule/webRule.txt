@@ -25,6 +25,45 @@ DO stopTime(threadId,requsetURL)
 ENDRULE
 
 
+RULE Connection leak trace getConnection rule
+CLASS ^java.sql.DriverManager
+METHOD getConnection
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
+AT ENTRY
+	IF  true
+  DO	traceln("Connection leak trace getConnection rule  of thread ID..................."),
+  		traceln("traceThread !!!!!!!!!!!!!!!!!!! ::"+ Thread.currentThread().getName()),
+		traceln("traceThread !!!!!!!!!!!!!!!!!!! :: "+ Thread.currentThread().getId()),
+    	registerOpenedConnection()
+#		test($!)
+ENDRULE
 
+
+
+RULE Connection  close Rule
+INTERFACE ^java.sql.Connection
+METHOD close
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
+AT ENTRY
+BIND connection:Connection=$0
+IF TRUE
+	DO  traceln("ConnectionconnectionTrackerHelper close rule of thread ID..................."),
+		traceln("traceThread !!!!!!!!!!!!!!!!!!! ::"+ Thread.currentThread().getName()),
+		traceln("traceThread !!!!!!!!!!!!!!!!!!! :: "+ Thread.currentThread().getId()),	
+		releaseConnection(connection)
+ENDRULE
+
+
+
+
+
+RULE  PreparedStatement getQuery Rule
+INTERFACE ^java.sql.Connection
+METHOD prepareStatement(java.lang.String)
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
+AT ENTRY
+IF true
+	DO  traceln("STATEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+ENDRULE
 
 

@@ -33,9 +33,6 @@ public class JdbcTracerHelper extends Helper {
 
 	}
 
-
-	
-
 	public String whoCalledMe() {
 		StringBuffer whocme = new StringBuffer(300);
 		StackTraceElement[] trace = new Throwable().getStackTrace();
@@ -53,16 +50,16 @@ public class JdbcTracerHelper extends Helper {
 		return whocme.toString();
 	}
 
-	// getconnection ÀÌ¶û sql exception ¸ðµÎ ÇÑ ÇÔ¼ö·Î °¡¼­ Á¶°Ç ºÐ±â ÇÏ¸é µÇÁö ¾ÊÀ»±î?
-	public void registerOpenedConnection() throws SQLException{
+	// getconnection ï¿½Ì¶ï¿½ sql exception ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð±ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
+	public void registerOpenedConnection() throws SQLException {
 		logger.info("getConnectionTracker method entry.......................");
 		// openedConnections.put(getConnectionId(), whoCalledMe());
 		OpenConnections openedConnections = OpenConnections.getInstance();
 		Hashtable ht = openedConnections.getCpendConnht();
 		int connectionCounter = ht.size();
 		logger.info("connectionCounter :: " + connectionCounter);
-		ht.put(Thread.currentThread().getId(),
-				System.currentTimeMillis());
+		ht.put(Thread.currentThread().getId(), System.currentTimeMillis());
 		Enumeration em = null;
 		em = ht.keys();
 
@@ -91,28 +88,13 @@ public class JdbcTracerHelper extends Helper {
 		}
 	}
 
-	// public void start() {
-	// long test = System.currentTimeMillis();
-	// ht.put(Thread.currentThread(), test);
-	// logger.debug("startTIme:" + test);
-	// logger.debug("threadStackTrace :: "+
-	// Thread.currentThread().getStackTrace());
-	// }
-	//
-	//
-	// public void stop() {
-	// long test = System.currentTimeMillis();
-	// System.out.println("stopTime:" + test);
-	// result = test - (Long) ht.remove(Thread.currentThread());
-	// logger.debug("elaspedTime:" + result);
-	//
-	//
-	// }
-	//
+
 
 	public void releaseConnection(Connection connection) {
 		logger.info("releaseConnection..................");
-		
+		OpenConnections openedConnections = OpenConnections.getInstance();
+		Hashtable ht = openedConnections.getCpendConnht();
+		ht.remove(Thread.currentThread().getId());
 
 	}
 

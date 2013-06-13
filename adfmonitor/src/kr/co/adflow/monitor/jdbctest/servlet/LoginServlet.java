@@ -48,11 +48,11 @@ public class LoginServlet extends HttpServlet {
 			logger.info("sessionID :: "+id);
 			result = "SUCCESS";
 //			response.sendRedirect("/EyleeBoard/board/list.jsp");
-			response.sendRedirect("/hellobyteman/login/LoginResult.jsp");
+			response.sendRedirect("/adfmonitor/login/LoginResult.jsp");
 		}
 		else{
 			result ="FAIL";
-			response.sendRedirect("/hellobyteman/login/login.jsp");
+			response.sendRedirect("/adfmonitor/login/login.jsp");
 		}
 		
 		

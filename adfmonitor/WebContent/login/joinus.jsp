@@ -24,7 +24,7 @@ function idCheck(id){
 	else
 	{	
 		//document.location="/EyleeBoard/validateID?id="+id+"&idValidateCount="+idValidateCount;
-		url = "/hellobyteman/validateID?id="+id+"&idValidateCount="+idValidateCount;
+		url = "/adfmonitor/validateID?id="+id+"&idValidateCount="+idValidateCount;
 		window.open(url,"post","width=300 height=150");
 		
 	
@@ -73,7 +73,7 @@ function inputCheck()
 <body>
 <div class="joinus_form">
 JOIN US <br/>
-<form name="joinus" method="post" action="/hellobyteman/JoinusServlet">
+<form name="joinus" method="post" action="/adfmonitor/JoinusServlet">
 <p id="formalert"></p>
 <div class="idform">
 

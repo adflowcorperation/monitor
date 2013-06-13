@@ -54,7 +54,7 @@ public class WebHelper extends Helper {
 			logger.debug("elapesdTime:" + elapesdTime);
 			String key = reqUrlUtil.sendStatsdUrl(bf);
 			if (!key.contains("localhost")) {
-				client.timing(key, (int) elapesdTime);
+				client.gauge(key, elapesdTime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -12,7 +12,7 @@
 로그아웃 되었습니다.
 </div>
 <div>
-<input type="button" value="login" onclick="window.location.href='/hellobyteman/login/login.jsp'" />
+<input type="button" value="login" onclick="window.location.href='/adfmonitor/login/login.jsp'" />
 </div>
 </body>
 </html>
