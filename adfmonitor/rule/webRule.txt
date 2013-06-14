@@ -29,7 +29,7 @@ ENDRULE
 RULE getConnection rule
 INTERFACE ^javax.sql.DataSource
 METHOD getConnection
-HELPER kr.co.adflow.byteman.JdbcTracerHelper
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT EXIT
 IF  true
 DO	registerOpenedConnection($!)
@@ -40,7 +40,7 @@ ENDRULE
 RULE be caught exception when connectting
 CLASS ^java.sql.SQLException
 METHOD <init>
-HELPER kr.co.adflow.byteman.JdbcTracerHelper
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT ENTRY
 IF TRUE
 DO  getSQLException($0)
@@ -51,7 +51,7 @@ ENDRULE
 RULE Connection  close Rule
 INTERFACE ^java.sql.Connection
 METHOD close
-HELPER kr.co.adflow.byteman.JdbcTracerHelper
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT ENTRY
 IF TRUE
 DO  releaseConnection()
@@ -63,7 +63,7 @@ ENDRULE
 RULE connection start time
 INTERFACE ^javax.sql.DataSource
 METHOD getConnection
-HELPER  kr.co.adflow.byteman.JdbcTracerHelper
+HELPER  kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT ENTRY
 IF TRUE
 DO getConnectionTime()
@@ -74,7 +74,7 @@ ENDRULE
 RULE connection stop time
 INTERFACE ^java.sql.Connection
 METHOD close
-HELPER kr.co.adflow.byteman.JdbcTracerHelper
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT EXIT
 IF TRUE
 DO releaseConnectionTime()
@@ -85,7 +85,7 @@ ENDRULE
 RULE  PreparedStatement getQuery Rule
 INTERFACE ^java.sql.Connection
 METHOD prepareStatement(java.lang.String)
-HELPER  kr.co.adflow.byteman.JdbcTracerHelper
+HELPER  kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT ENTRY
 BIND queryString : String = $1
 IF queryString != null
@@ -97,7 +97,7 @@ ENDRULE
 RULE Statement getQuery Rule
 INTERFACE ^java.sql.Statement
 METHOD executeQuery(java.lang.String)
-HELPER kr.co.adflow.byteman.JdbcTracerHelper
+HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
 AT ENTRY
 IF true
 	DO  executeQueryByteman($1)
