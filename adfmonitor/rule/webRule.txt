@@ -57,7 +57,6 @@ IF TRUE
 DO  releaseConnection()
 ENDRULE
 
-
 #########################################################################
 # get query start point
 RULE connection start time
