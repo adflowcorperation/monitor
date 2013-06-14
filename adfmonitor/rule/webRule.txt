@@ -24,46 +24,81 @@ IF true
 DO stopTime(threadId,requsetURL)
 ENDRULE
 
-
-RULE Connection leak trace getConnection rule
-CLASS ^java.sql.DriverManager
+#########################################################################
+# monitor connection leak start point
+RULE getConnection rule
+INTERFACE ^javax.sql.DataSource
 METHOD getConnection
-HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
-AT ENTRY
-	IF  true
-  DO	traceln("Connection leak trace getConnection rule  of thread ID..................."),
-  		traceln("traceThread !!!!!!!!!!!!!!!!!!! ::"+ Thread.currentThread().getName()),
-		traceln("traceThread !!!!!!!!!!!!!!!!!!! :: "+ Thread.currentThread().getId()),
-    	registerOpenedConnection()
-#		test($!)
+HELPER kr.co.adflow.byteman.JdbcTracerHelper
+AT EXIT
+IF  true
+DO	registerOpenedConnection($!)
 ENDRULE
 
+#########################################################################
+# monitor connection leak caught SQLException
+RULE be caught exception when connectting
+CLASS ^java.sql.SQLException
+METHOD <init>
+HELPER kr.co.adflow.byteman.JdbcTracerHelper
+AT ENTRY
+IF TRUE
+DO  getSQLException($0)
+ENDRULE
 
-
+#########################################################################
+# monitor connection leak close point
 RULE Connection  close Rule
 INTERFACE ^java.sql.Connection
 METHOD close
-HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
+HELPER kr.co.adflow.byteman.JdbcTracerHelper
 AT ENTRY
-BIND connection:Connection=$0
 IF TRUE
-	DO  traceln("ConnectionconnectionTrackerHelper close rule of thread ID..................."),
-		traceln("traceThread !!!!!!!!!!!!!!!!!!! ::"+ Thread.currentThread().getName()),
-		traceln("traceThread !!!!!!!!!!!!!!!!!!! :: "+ Thread.currentThread().getId()),	
-		releaseConnection(connection)
+DO  releaseConnection()
 ENDRULE
 
 
+#########################################################################
+# get query start point
+RULE connection start time
+INTERFACE ^javax.sql.DataSource
+METHOD getConnection
+HELPER  kr.co.adflow.byteman.JdbcTracerHelper
+AT ENTRY
+IF TRUE
+DO getConnectionTime()
+ENDRULE
 
+#########################################################################
+# get query stop point
+RULE connection stop time
+INTERFACE ^java.sql.Connection
+METHOD close
+HELPER kr.co.adflow.byteman.JdbcTracerHelper
+AT EXIT
+IF TRUE
+DO releaseConnectionTime()
+ENDRULE
 
-
+#########################################################################
+# get query rule 1 (for ibatis, oracle)
 RULE  PreparedStatement getQuery Rule
 INTERFACE ^java.sql.Connection
 METHOD prepareStatement(java.lang.String)
-HELPER kr.co.adflow.monitor.helper.JdbcTracerHelper
+HELPER  kr.co.adflow.byteman.JdbcTracerHelper
 AT ENTRY
-IF true
-	DO  traceln("STATEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+BIND queryString : String = $1
+IF queryString != null
+DO  executeQueryByteman($1)
 ENDRULE
 
-
+#########################################################################
+# get query rule 2 (for oracle)
+RULE Statement getQuery Rule
+INTERFACE ^java.sql.Statement
+METHOD executeQuery(java.lang.String)
+HELPER kr.co.adflow.byteman.JdbcTracerHelper
+AT ENTRY
+IF true
+	DO  executeQueryByteman($1)
+ENDRULE
