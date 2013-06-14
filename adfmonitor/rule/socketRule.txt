@@ -1,12 +1,9 @@
-RULE ServerSocket Read InputStream
-CLASS ^java.net.Socket
-METHOD getInputStream
+RULE Socket Read InputStream
+CLASS ^java.io.InputStream
+METHOD read
 HELPER  kr.co.adflow.monitor.helper.SocketHelper
 AT EXIT
 IF TRUE
-DO traceln("inputStrem getINputStream............................"),
-   inputStream($!)
+DO traceln("Socket Read InputStream"),
+   inputStreamSort($0,$!)
 ENDRULE
-
-
-

@@ -58,6 +58,7 @@ public class LongThreadCheck extends Thread {
 					client.timing("longThreadCont", set.size());
 					stackTrace.getStackTrace(key);
 					logger.debug("longRunningThreadCount:" + set.size());
+					
 
 				}
 
