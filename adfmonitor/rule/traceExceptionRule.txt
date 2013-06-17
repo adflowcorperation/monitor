@@ -1,14 +1,11 @@
 #########################################################################
 # Exception track Rule
-RULE be caught exception when connectting
-CLASS javax.servlet.http.HttpServlet
-METHOD service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-HELPER kr.co.adflow.monitor.exception.InterceptException
+RULE catch exception Rule
+CLASS ^java.lang.Exception
+METHOD <init>
+HELPER kr.co.adflow.monitor.helper.ExceptionTraceHelper
 AT ENTRY
-BIND hServlet:HttpServlet= $0,
-	 request:HttpServletRequest = $1,
-	 response:HttpServletResponse = $2,
-	 threadId:String = Long.toString(Thread.currentThread().getId())
+BIND exception = $this
 IF TRUE
-DO throw new InterceptException(threadId)
+DO needIntercepting(exception)
 ENDRULE
