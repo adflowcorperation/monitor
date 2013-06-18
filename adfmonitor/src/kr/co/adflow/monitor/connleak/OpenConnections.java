@@ -42,7 +42,7 @@ public class OpenConnections extends Thread {
 			//
 			Hashtable ht = openedConnections.getCpendConnht();
 
-			logger.info("openedConnections.getCpendConnht() :: " + ht.size());
+//			logger.info("openedConnections.getCpendConnht() :: " + ht.size());
 			// 시간체크로직구현
 			long currentTime = System.currentTimeMillis();
 
