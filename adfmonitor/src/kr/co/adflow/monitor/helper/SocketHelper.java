@@ -5,19 +5,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import kr.co.adflow.monitor.statsd.StatsdClient;
 
+import org.apache.log4j.Logger;
 import org.jboss.byteman.rule.Rule;
 import org.jboss.byteman.rule.helper.Helper;
-
-import com.sun.swing.internal.plaf.synth.resources.synth;
 
 public class SocketHelper extends Helper {
 
 	private static Hashtable hash = new Hashtable();
 	private static StatsdClient client = StatsdClient.getChanInstance();
+	private static Logger logger = Logger.getLogger(SocketHelper.class);
 
 	protected SocketHelper(Rule rule) {
 		super(rule);
@@ -25,6 +24,7 @@ public class SocketHelper extends Helper {
 	}
 
 	public void socketInfo(Socket socket) {
+		logger.debug("in socketInfo...");
 		System.out.println("in socketInfo..............");
 		System.out.println("threadID:" + Thread.currentThread().getId());
 		System.out

@@ -24,6 +24,7 @@ public class EchoServer {
 		}
 
 		Socket clientSocket = null;
+		logger.debug("Waiting for connection.....");
 		System.out.println("Waiting for connection.....");
 
 		try {
