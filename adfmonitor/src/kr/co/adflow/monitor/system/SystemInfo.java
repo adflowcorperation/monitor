@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 
 import kr.co.adflow.monitor.statsd.StatsdClient;
 
+import org.apache.log4j.Logger;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
@@ -19,6 +20,7 @@ public class SystemInfo extends Thread {
 	private static StatsdClient sc = StatsdClient.getChanInstance();
 	private static OperatingSystemMXBean osbean = (OperatingSystemMXBean) ManagementFactory
 			.getOperatingSystemMXBean();
+	private static Logger logger = Logger.getLogger(SystemInfo.class);
 
 	/**
 	 * @param args
@@ -35,36 +37,34 @@ public class SystemInfo extends Thread {
 		return systemInfo;
 	}
 
-	public void test() throws Exception {
+	public void getSysInfo() throws Exception {
 
 		while (true) {
 			sleep(3000);
-			System.out.println("********CPU**********");
+			logger.info("********CPU**********");
 			getCpuInfo();
-			System.out.println("********HDD**********");
+			logger.info("********HDD**********");
 			getHDDInfo();
-			System.out.println("********HMem**********");
+			logger.info("********HMem**********");
 			getHeapMemInfo();
-			System.out.println("********LMem**********");
+			logger.info("********LMem**********");
 			getLocalMemInfo();
-			System.out.println("********NHMem**********");
-			getNonHeapMemInfo();
+			logger.info("********NHMem**********");
+			//getNonHeapMemInfo();
 			getNonHeapMemInfo2();
 		}
 	}
 
 	public void getCpuInfo() throws SigarException {
 
-		System.out.println("CPUINFO");
 		CpuPerc cpu = sigar.getCpuPerc();
-		System.out.println("User Time....." + CpuPerc.format(cpu.getUser()));
-		System.out.println("Sys Time......" + CpuPerc.format(cpu.getSys()));
-		System.out.println("Idle Time....." + CpuPerc.format(cpu.getIdle()));
-		System.out.println("Wait Time....." + CpuPerc.format(cpu.getWait()));
-		System.out.println(("Nice Time....." + CpuPerc.format(cpu.getNice())));
-		System.out
-				.println("Combined......" + CpuPerc.format(cpu.getCombined()));
-		System.out.println("Irq Time......" + CpuPerc.format(cpu.getIdle()));
+		logger.info("User Time....." + CpuPerc.format(cpu.getUser()));
+		logger.info("Sys Time......" + CpuPerc.format(cpu.getSys()));
+		logger.info("Idle Time....." + CpuPerc.format(cpu.getIdle()));
+		logger.info("Wait Time....." + CpuPerc.format(cpu.getWait()));
+		logger.info(("Nice Time....." + CpuPerc.format(cpu.getNice())));
+		logger.info("Combined......" + CpuPerc.format(cpu.getCombined()));
+		logger.info("Irq Time......" + CpuPerc.format(cpu.getIdle()));
 
 		sc.gauge("kr.co.adflow.cpu." + osbean.getName(),
 				cpu.getCombined() * 100);
@@ -75,9 +75,9 @@ public class SystemInfo extends Thread {
 		Mem mem;
 
 		mem = sigar.getMem();
-		System.out.println("Total =" + (mem.getTotal() / 1024) / 1024 + "M av");
-		System.out.println("Used =" + (mem.getUsed() / 1024) / 1024 + "M used");
-		System.out.println("Free =" + (mem.getFree() / 1024) / 1024 + "M free");
+		logger.info("Total =" + (mem.getTotal() / 1024) / 1024 + "M av");
+		logger.info("Used =" + (mem.getUsed() / 1024) / 1024 + "M used");
+		logger.info("Free =" + (mem.getFree() / 1024) / 1024 + "M free");
 		sc.gauge("kr.co.adflow.mem.local." + osbean.getName(),
 				(mem.getUsed() / 1024) / 1024);
 		
@@ -89,10 +89,10 @@ public class SystemInfo extends Thread {
 		long pid = sigar.getPid();
 		System.out.println(pid);
 
-		System.out.println("Name = " + sigar.getProcState(pid).getName()
+		logger.info("Name = " + sigar.getProcState(pid).getName()
 				+ ", pid = " + pid + ", ResidentMem = "
 				+ sigar.getProcMem(pid).getResident());
-		System.out.println(sigar.getProcMem(pid).getResident() - heap);
+		logger.info(sigar.getProcMem(pid).getResident() - heap);
 		// sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(), sigar
 		// .getProcMem(pid).getResident());
 
@@ -102,7 +102,7 @@ public class SystemInfo extends Thread {
 		MemoryMXBean memorymbean = null;
 		try {
 			memorymbean = ManagementFactory.getMemoryMXBean();
-			System.out.println("Heap Memory Usage: "
+			logger.info("Heap Memory Usage: "
 					+ memorymbean.getHeapMemoryUsage().getUsed());
 			sc.gauge("kr.co.adflow.mem.heap." + osbean.getName(), memorymbean
 					.getHeapMemoryUsage().getUsed());
@@ -118,7 +118,7 @@ public class SystemInfo extends Thread {
 		MemoryMXBean memorymbean = null;
 		try {
 			memorymbean = ManagementFactory.getMemoryMXBean();
-			System.out.println("Non-Heap Memory Usage: "
+			logger.info("Non-Heap Memory Usage: "
 					+ memorymbean.getNonHeapMemoryUsage().getUsed());
 			sc.gauge("kr.co.adflow.mem.non-heap." + osbean.getName(),
 					memorymbean.getNonHeapMemoryUsage().getUsed());
@@ -140,16 +140,16 @@ public class SystemInfo extends Thread {
 			System.out.println(roots.length);
 			for (int i = 0; i < roots.length; i++) {
 				if (roots[i].getTotalSpace() > 0) {
-					System.out.println(roots[i]);
-					System.out.println("Total = " + roots[i].getTotalSpace());
-					System.out.println("Free = " + roots[i].getFreeSpace());
-					System.out.println("Used = "
+					logger.info(roots[i]);
+					logger.info("Total = " + roots[i].getTotalSpace());
+					logger.info("Free = " + roots[i].getFreeSpace());
+					logger.info("Used = "
 							+ (roots[i].getTotalSpace() - roots[i]
 									.getFreeSpace()));
 					total = roots[i].getTotalSpace();
 					using = roots[i].getTotalSpace() - roots[i].getFreeSpace();
 
-					System.out.println("percentage : "
+					logger.info("percentage : "
 							+ nf.format((using / total) * 100) + "%");
 					percentage = (using / total) * 100;
 					sc.gauge("kr.co.adflow.hdd." + osbean.getName() + "."

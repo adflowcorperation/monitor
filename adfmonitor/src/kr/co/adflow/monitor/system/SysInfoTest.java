@@ -40,7 +40,7 @@ public class SysInfoTest extends HttpServlet {
 
 		SystemInfo info = SystemInfo.getSysteminfoInstance();
 		try {
-			info.test();
+			info.getSysInfo();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
