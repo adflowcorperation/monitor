@@ -2,8 +2,6 @@ package kr.co.adflow.monitor.helper;
 
 import kr.co.adflow.monitor.statsd.StatsdClient;
 
-import oracle.net.aso.e;
-
 import org.apache.log4j.Logger;
 import org.jboss.byteman.rule.Rule;
 import org.jboss.byteman.rule.helper.Helper;
@@ -17,7 +15,7 @@ public class ExceptionTraceHelper extends Helper {
 
 	}
 	
-	// exception 을 받아서 stacktrace를 찍어서 거르기
+	// exception 을 받아서  key= threadID, exception message, stack trace send
 	public void needIntercepting(Exception exception){
 		logger.info("needIntercepting(Exception exception) entry point..........");
 		StringBuffer exceptionSb = null;
