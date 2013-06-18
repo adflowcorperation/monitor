@@ -41,6 +41,8 @@ public class SleepServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		response.sendRedirect("/adfmonitor/SleepServlet1");
 
 	}
 

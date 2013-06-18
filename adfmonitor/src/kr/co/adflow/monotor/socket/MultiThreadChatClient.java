@@ -1,4 +1,4 @@
-package kr.co.adflow.monotir.socket;
+package kr.co.adflow.monotor.socket;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

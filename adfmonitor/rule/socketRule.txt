@@ -13,14 +13,14 @@ ENDRULE
 
 ##################################OutPutStreamWriter###################################
 ################################################################################
-RULE OutputStreamWriter
-CLASS ^java.io.OutputStreamWriter
-METHOD write
-HELPER kr.co.adflow.monitor.helper.SocketHelper
-AT EXIT
-IF TRUE
-DO traceln("outputStream..Writer.....")
-ENDRULE
+#RULE OutputStreamWriter
+#CLASS ^java.io.OutputStreamWriter
+#METHOD write
+#HELPER kr.co.adflow.monitor.helper.SocketHelper
+#AT EXIT
+#IF TRUE
+#DO traceln("outputStream..Writer.....")
+#ENDRULE
 ####################################PrintWriter###################################################
 #######################################################################################
 RULE Socket PrintWriter print

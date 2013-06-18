@@ -9,7 +9,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <description></description>
     <display-name>SleepServlet</display-name>
@@ -20,7 +19,7 @@
     <servlet-name>SleepServlet</servlet-name>
     <url-pattern>/SleepServlet</url-pattern>
   </servlet-mapping>
-    <servlet>
+  <servlet>
     <description></description>
     <display-name>SysInfoTest</display-name>
     <servlet-name>SysInfoTest</servlet-name>
@@ -30,11 +29,7 @@
     <servlet-name>SysInfoTest</servlet-name>
     <url-pattern>/SysInfoTest</url-pattern>
   </servlet-mapping>
-  
-  
-
-  
-    <servlet>
+  <servlet>
     <description></description>
     <display-name>LoginServlet</display-name>
     <servlet-name>LoginServlet</servlet-name>
@@ -44,10 +39,7 @@
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/login/bbslogin</url-pattern>
   </servlet-mapping>
-  
-  
-  
-    <servlet>
+  <servlet>
     <description></description>
     <display-name>JoinusServlet</display-name>
     <servlet-name>JoinusServlet</servlet-name>
@@ -57,8 +49,14 @@
     <servlet-name>JoinusServlet</servlet-name>
     <url-pattern>/JoinusServlet</url-pattern>
   </servlet-mapping>
-  
-  
-  
-  
+  <servlet>
+    <description></description>
+    <display-name>SleepServlet1</display-name>
+    <servlet-name>SleepServlet1</servlet-name>
+    <servlet-class>kr.co.adflow.monitor.webtest.servlet.SleepServlet1</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SleepServlet1</servlet-name>
+    <url-pattern>/SleepServlet1</url-pattern>
+  </servlet-mapping>
 </web-app>
