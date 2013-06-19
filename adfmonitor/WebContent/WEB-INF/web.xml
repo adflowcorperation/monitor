@@ -59,4 +59,14 @@
     <servlet-name>SleepServlet1</servlet-name>
     <url-pattern>/SleepServlet1</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ThreadCount</display-name>
+    <servlet-name>ThreadCount</servlet-name>
+    <servlet-class>kr.co.adflow.monitor.webtest.servlet.ThreadCount</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ThreadCount</servlet-name>
+    <url-pattern>/ThreadCount</url-pattern>
+  </servlet-mapping>
 </web-app>

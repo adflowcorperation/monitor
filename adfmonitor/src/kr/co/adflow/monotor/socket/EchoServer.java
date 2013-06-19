@@ -24,7 +24,6 @@ public class EchoServer {
 		}
 
 		Socket clientSocket = null;
-		logger.debug("Waiting for connection.....");
 		System.out.println("Waiting for connection.....");
 
 		try {
@@ -36,8 +35,8 @@ public class EchoServer {
 
 		System.out.println("Connection successful");
 		System.out.println("Waiting for input.....");
-		OutputStreamWriter wr=null;
-		 wr = new OutputStreamWriter(clientSocket.getOutputStream());
+		PrintWriter out=null;
+		out = new PrintWriter(clientSocket.getOutputStream(),false);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				clientSocket.getInputStream(),"UTF-8"));
 		
@@ -45,13 +44,13 @@ public class EchoServer {
 
 		while ((inputLine = in.readLine()) != null) {
 			System.out.println("Server: " + inputLine);
-			wr.write(inputLine);
+			out.print(inputLine);
 
 			if (inputLine.equals("Bye."))
 				break;
 		}
 
-		wr.close();
+		out.close();
 		in.close();
 		clientSocket.close();
 		serverSocket.close();

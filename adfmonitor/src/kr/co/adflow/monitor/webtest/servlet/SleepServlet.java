@@ -29,7 +29,7 @@ public class SleepServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		Random ran = new Random();
+	/*	Random ran = new Random();
 
 		try {
 			long sleeptime = ran.nextInt(10) + 1;
@@ -40,9 +40,14 @@ public class SleepServlet extends HttpServlet {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
-		response.sendRedirect("/adfmonitor/SleepServlet1");
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

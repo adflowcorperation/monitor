@@ -29,7 +29,7 @@ public class EchoClient {
 		try {
 			// echoSocket = new Socket("taranis", 7);
 			echoSocket = new Socket(serverHostname, 10007);
-			wr = new OutputStreamWriter(echoSocket.getOutputStream());
+			out = new PrintWriter(echoSocket.getOutputStream(),false);
 			in = new BufferedReader(new InputStreamReader(
 					echoSocket.getInputStream(),"UTF-8"));
 		} catch (UnknownHostException e) {
@@ -46,12 +46,12 @@ public class EchoClient {
 
 		System.out.print("input: ");
 		while ((userInput = stdIn.readLine()) != null) {
-			wr.write(userInput);
+			out.print(userInput);
 			System.out.println("echo: " + in.readLine());
 			System.out.print("input: ");
 		}
 
-		wr.close();
+		out.close();
 		in.close();
 		stdIn.close();
 		echoSocket.close();

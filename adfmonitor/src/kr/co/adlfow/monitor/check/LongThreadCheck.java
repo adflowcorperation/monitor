@@ -55,7 +55,7 @@ public class LongThreadCheck extends Thread {
 					logger.debug("threadId:" + key);
 					set = this.getSet();
 					set.add(key);
-					client.timing("longThreadCont", set.size());
+					client.timing("longRunningThreadCount", set.size());
 					stackTrace.getStackTrace(key);
 					logger.debug("longRunningThreadCount:" + set.size());
 					

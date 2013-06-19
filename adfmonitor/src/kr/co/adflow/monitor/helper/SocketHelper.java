@@ -16,7 +16,7 @@ public class SocketHelper extends Helper {
 
 	private static Hashtable hash = new Hashtable();
 	private static StatsdClient client = StatsdClient.getChanInstance();
-	private static Logger logger = Logger.getLogger(SocketHelper.class);
+	
 
 	protected SocketHelper(Rule rule) {
 		super(rule);
@@ -24,7 +24,7 @@ public class SocketHelper extends Helper {
 	}
 
 	public void socketInfo(Socket socket) {
-		logger.debug("in socketInfo...");
+	
 		System.out.println("in socketInfo..............");
 		System.out.println("threadID:" + Thread.currentThread().getId());
 		System.out
