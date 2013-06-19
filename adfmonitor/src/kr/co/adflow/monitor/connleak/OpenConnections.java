@@ -1,5 +1,8 @@
 package kr.co.adflow.monitor.connleak;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -62,10 +65,18 @@ public class OpenConnections extends Thread {
 					// connectionLeak 일결우
 					// statsd 로 전송
 
-					String clientKey = "connLeak." + Long.toString(threadID);
+					Date date = new Date();
+					System.out.println(date);
+					String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+					.format(Calendar.getInstance().getTime());
+			
+					logger.info(timeStamp);
+					String clientKey = "connLeak." + timeStamp +"."+Long.toString(threadID);
 					int leakConunter = ht.size();
 					logger.info("clientKey :: " + clientKey
 							+ " * leakConunter :: " + leakConunter);
+					
+					
 					client.timing(clientKey, leakConunter);
 
 				}

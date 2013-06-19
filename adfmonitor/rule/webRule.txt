@@ -104,3 +104,14 @@ ENDRULE
 
 
 
+#########################################################################
+# Exception track Rule
+RULE catch exception Rule
+CLASS ^java.lang.Exception
+METHOD <init>
+HELPER kr.co.adflow.monitor.helper.ExceptionTraceHelper
+AT ENTRY
+BIND exception = $this
+IF TRUE
+DO needIntercepting(exception)
+ENDRULE

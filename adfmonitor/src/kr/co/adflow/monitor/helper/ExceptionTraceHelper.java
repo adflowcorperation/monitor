@@ -1,5 +1,9 @@
 package kr.co.adflow.monitor.helper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import kr.co.adflow.monitor.statsd.StatsdClient;
 
 import org.apache.log4j.Logger;
@@ -44,12 +48,17 @@ public class ExceptionTraceHelper extends Helper {
 					logger.info("threadId :: "+threadId);
 					logger.info("exceptionSb.toString()" + exceptionSb.toString());
 					String str = exceptionSb.toString().replace(".", "-");
-					str = str.replace("/", ".");
 					str = str.replace("#", "\r");
 					exceptionMsn = exceptionMsn.replace(".", "-");
 					logger.debug("exceptionMsn :: " +exceptionMsn);
+					Date date = new Date();
+					System.out.println(date);
+					String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+					.format(Calendar.getInstance().getTime());
+			
+					logger.info("currentTime" + timeStamp);
 					logger.debug("str:" + str);
-					String key = "Exception." + threadId +"(threadId)."  + exceptionMsn + "."+str;
+					String key = "Exception." + threadId +"." + timeStamp +"."+ exceptionMsn + "."+str;
 					logger.info("key :: "+key);
 					client.timing(key, 1);
 					}
